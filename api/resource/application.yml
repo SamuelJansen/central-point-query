@@ -1,0 +1,54 @@
+print-status: False
+api:
+    name: NgrokManagerApi
+    extension: yml
+    dependency:
+        update: False
+        list:
+            web: [Popen,Path]
+            local: []
+    list: [globals]
+    language: EN-US
+    git:
+        url: https://github.com/SamuelJansen/
+        extension: git
+
+    security:
+        secret: default
+    server:
+        scheme: https
+        host: localhost
+        port: 5000
+        base-url: /ngrok-manager-api
+    scheduler:
+        enable: ${SCHEDULER_API_ENABLE:True}
+    # database:
+        # dialect: ${DATABASE_DIALECT:}
+        # driver: ${DATABASE_DRIVER:}
+        # database: ${DATABASE_NAME:}
+        # username: ${DATABASE_USERNAME:}
+        # password: ${DATABASE_PASSWORD:}
+        # host: ${DATABASE_HOST:}
+        # port: ${DATABASE_PORT:}
+        # schema: ${DATABASE_SCHEMA:}
+
+speech-api:
+    base-url: http://192.168.25.2:5000/riachuelo-automating-api
+
+swagger:
+    host: ${api.server.host}:${api.server.port}
+    schemes: [${api.server.scheme}]
+    info:
+        title: {api.name}
+        version: 0.0.1
+        description: Ngrok Manager Api
+        terms-of-service: http://swagger.io/terms/
+        contact:
+            name: Samuel Jansen
+            email: samuel.jansenn@gmail.com
+        license:
+            name: Apache 2.0 / MIT License
+            url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+python:
+    version: 3.9

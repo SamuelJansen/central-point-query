@@ -1,0 +1,275 @@
+{
+    "swagger": "2.0",
+    "paths": {
+        "/apis/pid/{pid}": {
+            "delete": {
+                "parameters": [
+                    {
+                        "name": "pid",
+                        "type": "integer",
+                        "in": "path",
+                        "required": true,
+                        "description": null
+                    }
+                ],
+                "tags": [
+                    "Ngrok"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/apis/authenticate": {
+            "patch": {
+                "parameters": [],
+                "tags": [
+                    "Ngrok"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/apis/domain": {
+            "post": {
+                "parameters": [
+                    {
+                        "name": "body",
+                        "type": "object",
+                        "in": "body",
+                        "required": true,
+                        "description": null,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/NgrokApiRequestDto"
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Ngrok"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/NgrokApiResponseDto"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/apis/subdomain": {
+            "post": {
+                "parameters": [
+                    {
+                        "name": "body",
+                        "type": "object",
+                        "in": "body",
+                        "required": true,
+                        "description": null,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/NgrokApiRequestDto"
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Ngrok"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/NgrokApiResponseDto"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/apis": {
+            "put": {
+                "parameters": [],
+                "tags": [
+                    "Ngrok"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/NgrokApiResponseDto"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/actuator/health": {
+            "get": {
+                "parameters": [],
+                "tags": [
+                    "HealthCheck"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/ActuatorHealthResponseDto"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "NgrokApiRequestDto": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": null,
+                    "example": null
+                }
+            },
+            "required": [
+                "key"
+            ]
+        },
+        "NgrokApiResponseDto": {
+            "type": "object",
+            "properties": {
+                "baseUrl": {
+                    "type": null,
+                    "example": null
+                },
+                "documentationUrl": {
+                    "type": null,
+                    "example": null
+                },
+                "healthCheckUrl": {
+                    "type": null,
+                    "example": null
+                },
+                "host": {
+                    "type": null,
+                    "example": null
+                },
+                "key": {
+                    "type": null,
+                    "example": null
+                },
+                "pid": {
+                    "type": null,
+                    "example": null
+                }
+            },
+            "required": [
+                "baseUrl",
+                "documentationUrl",
+                "healthCheckUrl",
+                "host",
+                "key",
+                "pid"
+            ]
+        },
+        "ActuatorHealthResponseDto": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "object",
+                    "example": null
+                }
+            },
+            "required": [
+                "status"
+            ]
+        }
+    },
+    "tags": [
+        {
+            "name": "Ngrok",
+            "description": "Ngrok controller. Ngrok controller",
+            "externalDocs": null
+        },
+        {
+            "name": "HealthCheck",
+            "description": "HealthCheck controller",
+            "externalDocs": null
+        }
+    ],
+    "host": "localhost:5041",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/ngrok-manager-api",
+    "info": {
+        "title": {},
+        "description": "Ngrok Manager Api",
+        "version": "0.0.1",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Samuel Jansen",
+            "email": "samuel.jansenn@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0 / MIT License",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    }
+}
