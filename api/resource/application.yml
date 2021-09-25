@@ -1,6 +1,6 @@
 print-status: False
 api:
-    name: NgrokManagerApi
+    name: CentralPointQueryApi
     extension: yml
     dependency:
         update: False
@@ -19,21 +19,13 @@ api:
         scheme: https
         host: localhost
         port: 5000
-        base-url: /ngrok-manager-api
+        base-url: /central-point-query
     scheduler:
         enable: ${SCHEDULER_API_ENABLE:True}
-    # database:
-        # dialect: ${DATABASE_DIALECT:}
-        # driver: ${DATABASE_DRIVER:}
-        # database: ${DATABASE_NAME:}
-        # username: ${DATABASE_USERNAME:}
-        # password: ${DATABASE_PASSWORD:}
-        # host: ${DATABASE_HOST:}
-        # port: ${DATABASE_PORT:}
-        # schema: ${DATABASE_SCHEMA:}
 
-speech-api:
-    base-url: http://192.168.25.2:5000/riachuelo-automating-api
+feature-manager-api:
+    base-url: https://feature-dataset-manager.herokuapp.com/feature-dataset-manager-api
+    authorization: ${FEATURE_MANAGER_AUTHORIZATION:${api.security.secret}}
 
 swagger:
     host: ${api.server.host}:${api.server.port}
@@ -41,7 +33,7 @@ swagger:
     info:
         title: {api.name}
         version: 0.0.1
-        description: Ngrok Manager Api
+        description: Central Point Query Api
         terms-of-service: http://swagger.io/terms/
         contact:
             name: Samuel Jansen

@@ -1,0 +1,169 @@
+{
+    "swagger": "2.0",
+    "paths": {
+        "/data": {
+            "post": {
+                "parameters": [
+                    {
+                        "name": "body",
+                        "type": "object",
+                        "in": "body",
+                        "required": true,
+                        "description": null,
+                        "schema": {
+                            "$ref": "#/definitions/DataRequestDto"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Data"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/DataResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/actuator/health": {
+            "get": {
+                "parameters": [],
+                "tags": [
+                    "HealthCheck"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/ActuatorHealthResponseDto"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "DataRequestDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "object",
+                    "example": null
+                },
+                "key": {
+                    "type": "object",
+                    "example": null
+                },
+                "label": {
+                    "type": "object",
+                    "example": null
+                },
+                "type": {
+                    "type": "object",
+                    "example": null
+                },
+                "url": {
+                    "type": "object",
+                    "example": null
+                }
+            },
+            "required": [
+                "id",
+                "key",
+                "label",
+                "type",
+                "url"
+            ]
+        },
+        "DataResponseDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "object",
+                    "example": null
+                },
+                "key": {
+                    "type": "object",
+                    "example": null
+                },
+                "label": {
+                    "type": "object",
+                    "example": null
+                },
+                "type": {
+                    "type": "object",
+                    "example": null
+                },
+                "url": {
+                    "type": "object",
+                    "example": null
+                }
+            },
+            "required": [
+                "id",
+                "key",
+                "label",
+                "type",
+                "url"
+            ]
+        },
+        "ActuatorHealthResponseDto": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "object",
+                    "example": null
+                }
+            },
+            "required": [
+                "status"
+            ]
+        }
+    },
+    "tags": [
+        {
+            "name": "Data",
+            "description": "Data controller",
+            "externalDocs": null
+        },
+        {
+            "name": "HealthCheck",
+            "description": "HealthCheck controller",
+            "externalDocs": null
+        }
+    ],
+    "host": "localhost:5041",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/central-point-query",
+    "info": {
+        "title": {},
+        "description": "Central Point Query Api",
+        "version": "0.0.1",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Samuel Jansen",
+            "email": "samuel.jansenn@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0 / MIT License",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    }
+}
