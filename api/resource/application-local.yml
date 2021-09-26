@@ -12,5 +12,8 @@ api:
         settings:
             check_same_thread: False
 
+feature-manager-api:
+    base-url: http://localhost:5030/feature-dataset-manager-api
+
 swagger:
     host: localhost:${api.server.port}

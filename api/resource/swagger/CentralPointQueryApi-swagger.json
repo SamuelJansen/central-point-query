@@ -61,10 +61,6 @@
         "DataRequestDto": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "object",
-                    "example": null
-                },
                 "key": {
                     "type": "object",
                     "example": null
@@ -83,7 +79,6 @@
                 }
             },
             "required": [
-                "id",
                 "key",
                 "label",
                 "type",
@@ -93,10 +88,6 @@
         "DataResponseDto": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "object",
-                    "example": null
-                },
                 "key": {
                     "type": "object",
                     "example": null
@@ -115,7 +106,6 @@
                 }
             },
             "required": [
-                "id",
                 "key",
                 "label",
                 "type",

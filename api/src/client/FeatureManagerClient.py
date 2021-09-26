@@ -24,10 +24,11 @@ class FeatureManagerClient :
           'label': label,
           'featureDataList': []
         }
+        response = None
         try:
             response = requests.post(SAMPLE_DATA_URL + key, headers=basicHeaders, json=body)
         except Exception as exception:
-            self.raiseException(response)
+            self.raiseException(response, exception)
         self.reRaiseExceptionIfNeeded(response)
         return self.getCompleteResponseAsJson(response)
 
@@ -36,10 +37,11 @@ class FeatureManagerClient :
         body = {
           'featureDataList': [{'featureKey': featureKey}]
         }
+        response = None
         try:
             response = requests.put(SAMPLE_DATA_URL + key, headers=basicHeaders, json=body)
         except Exception as exception:
-            self.raiseException(response)
+            self.raiseException(response, exception)
         self.reRaiseExceptionIfNeeded(response)
         return self.getCompleteResponseAsJson(response)
 
@@ -51,24 +53,38 @@ class FeatureManagerClient :
         try:
             response = requests.post(FEATURE_DATA_URL + key, headers=basicHeaders, json=body)
         except Exception as exception:
-            self.raiseException(response)
+            self.raiseException(response, exception)
         self.reRaiseExceptionIfNeeded(response)
         return self.getCompleteResponseAsJson(response)
 
-    def raiseException(self, response):
-        raise GlobalException(
-            message = 'Error at client call',
-            status = HttpStatus.map(response.status_code),
-            logMessage = self.getErrorMessage(response)
-        )
+    def raiseException(self, response, exception):
+        if ObjectHelper.isNone(response):
+            raise GlobalException(
+                message = 'Error at client call',
+                status = HttpStatus.INTERNAL_SERVER_ERROR,
+                logMessage = str(exception) if ObjectHelper.isNotNone(exception) and StringHelper.isNotBlank(exception) else 'Client did not sent any message'
+            )
+        else:
+            raise GlobalException(
+                message = 'Error at client call',
+                status = HttpStatus.map(response.status_code),
+                logMessage = self.getErrorMessage(response, exception=exception)
+            )
 
     def reRaiseExceptionIfNeeded(self, response):
+        if ObjectHelper.isNone(response):
+            raise GlobalException(
+                message = 'Error at client call',
+                status = HttpStatus.map(response.status_code),
+                logMessage = self.getErrorMessage(response)
+            )
         if 399 < response.status_code :
             raise GlobalException(
                 message = self.getErrorMessage(response),
-                status = HttpStatus.map(response.status_code),
+                status = HttpStatus.INTERNAL_SERVER_ERROR,
                 logMessage = 'Error at client call'
             )
+
 
     def getCompleteResponseAsJson(self, response, fallbackStatus=HttpStatus.INTERNAL_SERVER_ERROR):
         responseBody, responseStatus = None, None
@@ -80,7 +96,7 @@ class FeatureManagerClient :
             log.failure(self.getCompleteResponseAsJson, 'Not possible to parse response as json', exception=exception, muteStackTrace=True)
         return responseBody, responseStatus
 
-    def getErrorMessage(self, response):
+    def getErrorMessage(self, response, exception=None):
         errorMessage = 'Client did not sent any message'
         try :
             possibleErrorMessage = response.json().get('message', response.json().get('error')).strip()
@@ -88,6 +104,7 @@ class FeatureManagerClient :
                 errorMessage = possibleErrorMessage
             else:
                 log.prettyPython(self.getErrorMessage, 'Client response', response.json(), logLevel=log.DEBUG)
-        except Exception as exception :
-            log.warning(self.getErrorMessage, 'Not possible to get error message from response', exception=exception)
-        return errorMessage
+        except Exception as innerException :
+            log.warning(self.getErrorMessage, 'Not possible to get error message from response', exception=innerException)
+        exceptionPortion = str(exception) if ObjectHelper.isNotNone(exception) and StringHelper.isNotBlank(exception) else 'Client did not sent any message'
+        return f'{exceptionPortion}{c.DOT_SPACE_CAUSE}{errorMessage}'

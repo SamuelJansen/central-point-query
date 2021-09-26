@@ -25,7 +25,7 @@ api:
 
 feature-manager-api:
     base-url: https://feature-dataset-manager.herokuapp.com/feature-dataset-manager-api
-    authorization: ${FEATURE_MANAGER_AUTHORIZATION:${api.security.secret}}
+    authorization: ${FEATURE_MANAGER_AUTHORIZATION:}
 
 swagger:
     host: ${api.server.host}:${api.server.port}

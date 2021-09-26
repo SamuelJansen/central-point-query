@@ -2,7 +2,7 @@ from python_helper import Constant
 from python_framework import Validator, ValidatorMethod, GlobalException, HttpStatus
 
 from dto.DataDto import DataRequestDto
-from model.Data import Data
+from Data import Data
 
 @Validator()
 class DataValidator:

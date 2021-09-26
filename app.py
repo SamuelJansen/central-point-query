@@ -6,7 +6,7 @@ globalsInstance = globals.newGlobalsInstance(__file__
     , failureStatus = True
     , debugStatus = True
 
-    # , warningStatus = True
+    , warningStatus = True
     # , wrapperStatus = True
     , logStatus = True
     # , testStatus = True

@@ -2,9 +2,9 @@ from python_helper import ObjectHelper
 from python_framework import SqlAlchemyProxy as sap
 from python_framework import Repository
 
-from model import Data
+from Data import Data
 
-@Repository(model = Data.Data)
+@Repository(model = Data)
 class DataRepository:
 
     def findAll(self) :
