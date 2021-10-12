@@ -1,6 +1,6 @@
 from python_helper import Constant as c
 from python_helper import ObjectHelper, log, StringHelper
-from python_framework import Client, ClientMethod, HttpStatus, GlobalException
+from python_framework import Client, ClientMethod, HttpStatus, GlobalException, FlaskManager
 
 import json
 import requests
@@ -14,6 +14,9 @@ BASIC_HEADERS = basicHeaders = {
     'Accept': 'text/plain',
     'Authorization': f'Bearer {FeatureManagerClientConfig.AUTHORIZATION}'
 }
+
+CLIENT_DID_NOT_SENT_ANY_MESSAGE = 'Client did not sent any message'
+ERROR_AT_CLIENT_CALL_MESSAGE = 'Error at client call'
 
 @Client()
 class FeatureManagerClient :
@@ -29,7 +32,7 @@ class FeatureManagerClient :
             response = requests.post(SAMPLE_DATA_URL + key, headers=basicHeaders, json=body)
         except Exception as exception:
             self.raiseException(response, exception)
-        self.reRaiseExceptionIfNeeded(response)
+        self.raiseExceptionIfNeeded(response)
         return self.getCompleteResponseAsJson(response)
 
     @ClientMethod(requestClass=[str, str])
@@ -42,7 +45,7 @@ class FeatureManagerClient :
             response = requests.put(SAMPLE_DATA_URL + key, headers=basicHeaders, json=body)
         except Exception as exception:
             self.raiseException(response, exception)
-        self.reRaiseExceptionIfNeeded(response)
+        self.raiseExceptionIfNeeded(response)
         return self.getCompleteResponseAsJson(response)
 
     @ClientMethod(requestClass=[str, str])
@@ -54,37 +57,32 @@ class FeatureManagerClient :
             response = requests.post(FEATURE_DATA_URL + key, headers=basicHeaders, json=body)
         except Exception as exception:
             self.raiseException(response, exception)
-        self.reRaiseExceptionIfNeeded(response)
+        self.raiseExceptionIfNeeded(response)
         return self.getCompleteResponseAsJson(response)
 
     def raiseException(self, response, exception):
         if ObjectHelper.isNone(response):
+            # FlaskManager.getGlobalException(exception, resourceInstance, resourceInstanceMethod, api=None)
             raise GlobalException(
-                message = 'Error at client call',
-                status = HttpStatus.INTERNAL_SERVER_ERROR,
-                logMessage = str(exception) if ObjectHelper.isNotNone(exception) and StringHelper.isNotBlank(exception) else 'Client did not sent any message'
+                logMessage = f'{ERROR_AT_CLIENT_CALL_MESSAGE}{c.DOT_SPACE_CAUSE}{CLIENT_DID_NOT_SENT_ANY_MESSAGE if ObjectHelper.isNone(exception) or StringHelper.isBlank(exception) else str(exception)}'
             )
         else:
+            #
             raise GlobalException(
-                message = 'Error at client call',
+                message = self.getErrorMessage(response, exception=exception),
                 status = HttpStatus.map(response.status_code),
-                logMessage = self.getErrorMessage(response, exception=exception)
+                logMessage = ERROR_AT_CLIENT_CALL_MESSAGE
             )
 
-    def reRaiseExceptionIfNeeded(self, response):
+    def raiseExceptionIfNeeded(self, response):
         if ObjectHelper.isNone(response):
-            raise GlobalException(
-                message = 'Error at client call',
-                status = HttpStatus.map(response.status_code),
-                logMessage = self.getErrorMessage(response)
-            )
+            raise GlobalException(logMessage = self.getErrorMessage(response))
         if 399 < response.status_code :
             raise GlobalException(
                 message = self.getErrorMessage(response),
-                status = HttpStatus.INTERNAL_SERVER_ERROR,
-                logMessage = 'Error at client call'
+                status = HttpStatus.map(response.status_code),
+                logMessage = ERROR_AT_CLIENT_CALL_MESSAGE
             )
-
 
     def getCompleteResponseAsJson(self, response, fallbackStatus=HttpStatus.INTERNAL_SERVER_ERROR):
         responseBody, responseStatus = None, None
@@ -97,7 +95,7 @@ class FeatureManagerClient :
         return responseBody, responseStatus
 
     def getErrorMessage(self, response, exception=None):
-        errorMessage = 'Client did not sent any message'
+        errorMessage = CLIENT_DID_NOT_SENT_ANY_MESSAGE
         try :
             possibleErrorMessage = response.json().get('message', response.json().get('error')).strip()
             if ObjectHelper.isNotNone(possibleErrorMessage) and StringHelper.isNotBlank(possibleErrorMessage):
@@ -106,5 +104,5 @@ class FeatureManagerClient :
                 log.prettyPython(self.getErrorMessage, 'Client response', response.json(), logLevel=log.DEBUG)
         except Exception as innerException :
             log.warning(self.getErrorMessage, 'Not possible to get error message from response', exception=innerException)
-        exceptionPortion = str(exception) if ObjectHelper.isNotNone(exception) and StringHelper.isNotBlank(exception) else 'Client did not sent any message'
+        exceptionPortion = ERROR_AT_CLIENT_CALL_MESSAGE if ObjectHelper.isNone(exception) or StringHelper.isBlank(exception) else str(exception)
         return f'{exceptionPortion}{c.DOT_SPACE_CAUSE}{errorMessage}'
