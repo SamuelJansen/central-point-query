@@ -61,23 +61,18 @@ class FeatureManagerClient :
         return self.getCompleteResponseAsJson(response)
 
     def raiseException(self, response, exception):
-        if ObjectHelper.isNone(response):
-            # FlaskManager.getGlobalException(exception, resourceInstance, resourceInstanceMethod, api=None)
-            raise GlobalException(
-                logMessage = f'{ERROR_AT_CLIENT_CALL_MESSAGE}{c.DOT_SPACE_CAUSE}{CLIENT_DID_NOT_SENT_ANY_MESSAGE if ObjectHelper.isNone(exception) or StringHelper.isBlank(exception) else str(exception)}'
-            )
-        else:
-            #
-            raise GlobalException(
-                message = self.getErrorMessage(response, exception=exception),
-                status = HttpStatus.map(response.status_code),
-                logMessage = ERROR_AT_CLIENT_CALL_MESSAGE
-            )
+        raise GlobalException(
+            logMessage = self.getErrorMessage(response, exception=exception)
+        )
 
     def raiseExceptionIfNeeded(self, response):
-        if ObjectHelper.isNone(response):
+        if ObjectHelper.isNone(response) or ObjectHelper.isNone(response.status_code):
             raise GlobalException(logMessage = self.getErrorMessage(response))
-        if 399 < response.status_code :
+        elif 500 <= response.status_code :
+            raise GlobalException(
+                logMessage = self.getErrorMessage(response)
+            )
+        elif 400 <= response.status_code :
             raise GlobalException(
                 message = self.getErrorMessage(response),
                 status = HttpStatus.map(response.status_code),
