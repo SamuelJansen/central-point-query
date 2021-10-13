@@ -7,6 +7,9 @@ class DataController:
 
     @ControllerMethod(url = '/',
         requestClass = [DataDto.DataRequestDto],
-        responseClass = [DataDto.DataResponseDto])
+        responseClass = [DataDto.DataResponseDto],
+        logRequest = True,
+        logResponse = True,
+    )
     def post(self, dto):
         return self.service.data.createNewData(dto), HttpStatus.CREATED

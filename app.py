@@ -4,11 +4,12 @@ globalsInstance = globals.newGlobalsInstance(__file__
     , successStatus = True
     , errorStatus = True
     , failureStatus = True
-    , debugStatus = True
+    , infoStatus = True
+    # , debugStatus = True
 
-    , warningStatus = True
+    # , warningStatus = True
     # , wrapperStatus = True
-    , logStatus = True
+    # , logStatus = True
     # , testStatus = True
 )
 

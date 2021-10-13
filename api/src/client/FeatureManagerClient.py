@@ -66,12 +66,8 @@ class FeatureManagerClient :
         )
 
     def raiseExceptionIfNeeded(self, response):
-        if ObjectHelper.isNone(response) or ObjectHelper.isNone(response.status_code):
+        if ObjectHelper.isNone(response) or ObjectHelper.isNone(response.status_code) or 500 <= response.status_code:
             raise GlobalException(logMessage = self.getErrorMessage(response))
-        elif 500 <= response.status_code :
-            raise GlobalException(
-                logMessage = self.getErrorMessage(response)
-            )
         elif 400 <= response.status_code :
             raise GlobalException(
                 message = self.getErrorMessage(response),
