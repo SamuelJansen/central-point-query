@@ -2,7 +2,7 @@ from python_helper import ObjectHelper
 from python_framework import SqlAlchemyProxy as sap
 from python_framework import Repository
 
-from Data import Data
+from model import Data
 
 @Repository(model = Data)
 class DataRepository:
