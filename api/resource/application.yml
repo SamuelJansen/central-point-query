@@ -21,7 +21,7 @@ api:
         port: 5000
         base-url: /central-point-query
     scheduler:
-        enable: ${SCHEDULER_API_ENABLE:True}
+        enable: ${SCHEDULER_API_ENABLE:False}
 
 feature-manager-api:
     base-url: https://feature-dataset-manager.herokuapp.com/feature-dataset-manager-api
